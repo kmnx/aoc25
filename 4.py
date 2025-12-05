@@ -6,7 +6,7 @@ def position_check(array, movable_rolls):
     new_map = [[0] * len(array[0]) for i in range(len(array))]
     for x, line in enumerate(array):
         for y, char in enumerate(line):
-            #print("we're at:", x, y, "with", array[x][y])
+            # print("we're at:", x, y, "with", array[x][y])
             if char == "@":
                 position_count = 0
                 for a in [
@@ -27,7 +27,7 @@ def position_check(array, movable_rolls):
                     ):
                         pass
                     else:
-                        #print("testing: ", x + a[0], y + a[1])
+                        # print("testing: ", x + a[0], y + a[1])
                         if array[x + a[0]][y + a[1]] == "@":
                             position_count += 1
                 if position_count < 4:
@@ -47,7 +47,7 @@ if __name__ == "__main__":
     reference = copy.deepcopy(data)
     movable_rolls = []
 
-    #for line in data:
+    # for line in data:
     #    print(line)
     movable, new = position_check(data, movable_rolls)
     print("Part 1:")
