@@ -10,7 +10,6 @@ def range_maker(raw_ranges):
         processed = False
         splitrange = line
         print("new range", splitrange)
-        # we don't have it yet
         for existing_range in better_ranges:
             print("currently tested range: ", existing_range)
             # completely in existing range
