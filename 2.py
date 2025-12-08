@@ -8,17 +8,17 @@ data = data[0].split(",")
 
 data_list = []
 for line in data:
-    print(line)
+    # print(line)
     parts = line.split("-")
     start = int(parts[0])
     end = int(parts[1])
     data_list.append((start, end))
 
-print(data_list)
+# print(data_list)
 
 summed = 0
 for ids in data_list:
-    print(ids)
+    # print(ids)
     start = ids[0]
     end = ids[1]
     for num in range(start, end + 1):
@@ -29,8 +29,8 @@ for ids in data_list:
         # print(split_id_end)
         if not split_id_end.startswith("0") and not split_id_start.startswith("0"):
             if split_id_start == split_id_end:
-                print("found one!")
-                print(num)
+                # print("found one!")
+                # print(num)
                 summed += num
 
 print("part 1:")
@@ -38,7 +38,7 @@ print(summed)
 
 summed = 0
 for ids in data_list:
-    print(ids)
+    # print(ids)
     start = ids[0]
     end = ids[1]
     for num in range(start, end + 1):
@@ -50,19 +50,19 @@ for ids in data_list:
             if len(str(num)) % 2 == 0:
                 if str(num)[0 : len(str(num)) // 2] == str(num)[len(str(num)) // 2 :]:
                     summed += int(num)
-                    print("found one!")
-                    print(num)
+                    # print("found one!")
+                    # print(num)
                     continue
             if len(str(num)) % 3 == 0:
                 if str(num)[0:3] == str(num)[3:6] == str(num)[6:9]:
                     summed += int(num)
-                    print("found one!")
-                    print(num)
+                    # print("found one!")
+                    # print(num)
                     continue
                 elif str(num)[0:2] == str(num)[2:4] == str(num)[4:6]:
                     summed += int(num)
-                    print("found one!")
-                    print(num)
+                    # print("found one!")
+                    # print(num)
                     continue
             if len(str(num)) % 5 == 0:
                 if (
@@ -73,13 +73,13 @@ for ids in data_list:
                     == str(num)[8:10]
                 ):
                     summed += int(num)
-                    print("found one!")
-                    print(num)
+                    # print("found one!")
+                    # print(num)
                     continue
             # primes:
             if len(set(str(num))) == 1:
-                print("found one!")
-                print(num)
+                # print("found one!")
+                # print(num)
                 summed += int(num)
                 continue
 print("part 2:")

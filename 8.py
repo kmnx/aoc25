@@ -1,24 +1,20 @@
 import helpers.load_input as li
 import time
 import math
+import itertools
 
 
 def distance(p, q):
-    p1, p2, p3 = p[0], p[1], p[2]
-    q1, q2, q3 = q[0], q[1], q[2]
-
     distance = math.sqrt((p[0] - q[0]) ** 2 + (p[1] - q[1]) ** 2 + (p[2] - q[2]) ** 2)
     return distance
 
 
 def main(data):
     # print(data)
-
     all_distances = []
     for i, p in enumerate(data):
         for j in range(i + 1, len(data)):
             # print(i,j)
-
             euc_dist = distance(p, data[j])
             all_distances.append((euc_dist, [i, j]))
     sorted_distances = sorted(all_distances, key=lambda x: x[0])
@@ -36,32 +32,32 @@ def main(data):
             b = len(sorted_circuits[1])
             c = len(sorted_circuits[2])
             print("Part 1, 1000 connections:", a, b, c, a * b * c)
-        if connections_made == 10:
+        """if connections_made == 10:
             sorted_circuits = sorted(circuits, key=lambda x: len(x), reverse=True)
             a = len(sorted_circuits[0])
             b = len(sorted_circuits[1])
             c = len(sorted_circuits[2])
-            print("Part 1, 10 connections:", a, b, c, a * b * c)
+            print("Part 1, 10 connections:", a, b, c, a * b * c)"""
 
         if line[1][0] not in seen and line[1][1] not in seen:
             seen.add(line[1][0])
             seen.add(line[1][1])
-            circuits.append([line[1][0], line[1][1]])
+            # circuits.append([line[1][0], line[1][1]])
+            circuits.append({line[1][0], line[1][1]})
             connections_made += 1
 
         elif line[1][0] in seen and line[1][1] not in seen:
             seen.add(line[1][1])
             for circuit in circuits:
                 if line[1][0] in circuit:
-                    circuit.append(line[1][1])
+                    circuit.add(line[1][1])
                     connections_made += 1
-                    break
 
         elif line[1][1] in seen and line[1][0] not in seen:
             seen.add(line[1][0])
             for circuit in circuits:
                 if line[1][1] in circuit:
-                    circuit.append(line[1][0])
+                    circuit.add(line[1][0])
                     connections_made += 1
 
         elif line[1][0] in seen and line[1][1] in seen:
@@ -75,14 +71,13 @@ def main(data):
             if c0 == c1:
                 connections_made += 1
             else:
-                for n in circuits[c1]:
-                    circuits[c0].append(n)
+                circuits[c0].update(circuits[c1])
                 connections_made += 1
                 del circuits[c1]
-        if len(seen) == 20 and len(circuits) == 1:
+        """if len(seen) == 20 and len(circuits) == 1:
             dist = data[line[1][0]][0] * data[line[1][1]][0]
             print("Part 2 Distance, test data", dist)
-            break
+            break"""
 
         if len(seen) == 1000 and len(circuits) == 1:
             dist = data[line[1][0]][0] * data[line[1][1]][0]
