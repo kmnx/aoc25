@@ -12,12 +12,36 @@ def minimize_solution_sum(general_solution):
     best_values = None
     best_solution = None
 
-    # Try all combinations in a reasonable range
-    search_range = range(0, 60)
-    for values in itertools.product(search_range, repeat=len(params)):
+    # Extract bounds for each parameter from solution lines with <=1 parameter
+    param_bounds = {param: [0, 100] for param in params}  # default bounds
+
+    for expr in solution_vec:
+        involved = [param for param in params if param in expr.free_symbols]
+        if len(involved) == 1:
+            param = involved[0]
+            # Try to solve expr >= 0 for param
+            bounds = solve(expr >= 0, param)
+            # bounds may be a list of inequalities or values
+            if isinstance(bounds, list):
+                for b in bounds:
+                    # Only handle simple inequalities
+                    if hasattr(b, 'rel_op'):
+                        if b.rel_op == '<=':
+                            param_bounds[param][1] = min(param_bounds[param][1], int(b.rhs))
+                        elif b.rel_op == '>=':
+                            param_bounds[param][0] = max(param_bounds[param][0], int(b.rhs))
+        elif len(involved) == 0:
+            # If no parameter, just check if expr >= 0 is possible
+            if expr < 0:
+                return None  # No valid solution
+
+    # Build search ranges from bounds
+    search_ranges = [range(param_bounds[param][0], param_bounds[param][1] + 1) for param in params]
+
+    # Try all combinations in reduced ranges
+    for values in itertools.product(*search_ranges):
         subs = dict(zip(params, values))
         candidate = solution_vec.subs(subs)
-        # Only consider integer solutions
         if all((c.is_integer and c >= 0) for c in candidate):
             total = sum([int(c) for c in candidate])
             if min_sum is None or total < min_sum:
@@ -101,8 +125,9 @@ def joltages_tester(state_array,o):
     B = Matrix(joltages)
     try:
         solution = A.gauss_jordan_solve(B)
-        min_sol = minimize_solution_sum(solution)
         print("Joltages solution found:", solution)
+        min_sol = minimize_solution_sum(solution)
+        
     except:
         print("No Joltages solution found")
     return min_sol
